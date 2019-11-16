@@ -5,9 +5,11 @@
         <i class="iconfont back-icon">&#xe61b;</i>
       </span>
     </transition>
-    <base-header :class="{'page-header--import': showImportHeader, 'page-header__none': !showHeader}" :header-config="headerConfig" :bg-color="bgColor"/>
+    <home-header-skelete v-if="showSkelete"/>
+    <base-header :class="{'page-header--import': showImportHeader, 'page-header__none': !showHeader}" :header-config="headerConfig" :bg-color="bgColor" v-else/>
     <div class="g-container">
-      <transition :name="fade">
+      <home-skelete v-if="showSkelete"/>
+      <transition :name="fade" v-else>
         <keep-alive :exclude="keepAlive">
           <router-view ref="wrong" :class="['page-view', {'page-header--none': !showHeader, 'page-header--import': showImportHeader}]" @changeHeaderBack="YGBOARD = false">
           </router-view>
@@ -39,15 +41,20 @@
 <script>
 import Header from '@/components/Base/Header'
 import PlaySong from '@/views/PlaySong'
+import HomeSkelete from '@/skeleton/Home'
+import HomeHeaderSkelete from '@/skeleton/HomeHeader'
 
 export default {
   name: 'App',
   components: {
     'base-header': Header,
-    PlaySong
+    'home-skelete': HomeSkelete,
+    'home-header-skelete': HomeHeaderSkelete,
+    PlaySong,
   },
   data() {
     return {
+      showSkelete: true,
       timer: null,
       isPlay: false, // 是否在播放
       duration: 0, // 该音乐的总长度
@@ -82,6 +89,11 @@ export default {
     }
   },
   mounted() {
+    if (typeof window !== "undefined") {
+      const Fastclick = require('fastclick')
+      Fastclick.attach(document.body)
+    }
+    this.showSkelete = false
     this.$common.listen('setHeaderBack', this.changeHeaderBack)
     this.$common.listen('listenMusic', this.listenMusic)
     this.$common.listen('listenMusicProgress', this.listenMusicProgress)
@@ -233,6 +245,7 @@ export default {
   position: relative;
   overflow: hidden;
   flex: 1;
+  background: #0D0D0D;
 }
 .page-view {
   position: absolute;
@@ -253,11 +266,28 @@ export default {
 </style>
 
 <style scoped>
-  #app >>> .icon-love {
+  #martin-music >>> .icon-love {
     position: absolute;
     font-size: 32px;
     z-index: 10;
     animation: slideOpacity .8s ease-in-out forwards;
+  }
+
+  #martin-music >>> .c-skull__elecron {
+    background: -webkit-gradient(linear, left top, right top, color-stop(25%, #f2f2f2), color-stop(37%, #e6e6e6), color-stop(63%, #f2f2f2)) !important;
+    background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 37%, #f2f2f2 63%) !important;
+    background-size: 400% 100% !important;
+    animation: martin-loading 1.4s ease infinite !important;
+  }
+
+  @keyframes martin-loading {
+    0% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0 50%
+    }
   }
 
   @keyframes slideOpacity {

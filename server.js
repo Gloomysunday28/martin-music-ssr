@@ -18,8 +18,6 @@ server.get('*', (req, res) => {
   }
   
   renderer.renderToString(context, (err, html) => {
-    console.log(err);
-    
     if (err) {
       res.status(500).end('Internal Server Error')
       return

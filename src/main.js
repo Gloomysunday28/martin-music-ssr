@@ -57,7 +57,7 @@ Vue.mixin({
     }
   },
   computed: mapState({
-    personal: state => state.baseInfo.personal,
+    personal: state => (state.baseInfo.personal || {}),
   })
 })
 

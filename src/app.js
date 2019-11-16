@@ -19,11 +19,6 @@ import '@/assets/css/common.less'
 import 'swiper/dist/css/swiper.css'
 import '@/assets/font/iconfont.css'
 
-if (typeof window !== "undefined") {
-  const Fastclick = require('fastclick')
-  Fastclick.attach(document.body)
-}
-
 const components = [MusicInput, MusicTextArea]
 
 components.forEach(comp => {

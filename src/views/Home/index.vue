@@ -35,9 +35,6 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        <div class="c-skull__elecron"></div>
-      </div>
       <!-- 推荐歌单 -->
       <div class="c-music__recommend">
         <b class="c-recommend__label">推荐歌单</b>
@@ -227,25 +224,6 @@ export default {
     .c-recommend__label {
       color: #444;
       font-size: 40px;
-    }
-  }
-  .c-skull__elecron {
-    height: 250px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    background: -webkit-gradient(linear, left top, right top, color-stop(25%, #f2f2f2), color-stop(37%, #e6e6e6), color-stop(63%, #f2f2f2));
-    background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 37%, #f2f2f2 63%);
-    background-size: 400% 100%;
-    animation: martin-loading 1.4s ease infinite;
-  }
-
-  @keyframes martin-loading {
-    0% {
-        background-position: 100% 50%
-    }
-
-    100% {
-        background-position: 0 50%
     }
   }
 </style>
