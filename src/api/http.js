@@ -38,9 +38,9 @@ export default {
       if (typeof window !== 'undefined') {
         // box.$loading(true)
       }
-      // if (noCache.includes(config.url)) {
-      //   config.url += (config.url.includes('?') ? '&' : '?') + `timestamp=${+new Date()}` // 网易云音乐api为了避免高频ip请求错误,设置了2分钟的时间不去请求网易云服务器, 如果设置不缓存的话那么设置teimestamp
-      // }
+      if (noCache.includes(config.url)) {
+        config.url += (config.url.includes('?') ? '&' : '?') + `timestamp=${+new Date()}` // 网易云音乐api为了避免高频ip请求错误,设置了2分钟的时间不去请求网易云服务器, 如果设置不缓存的话那么设置teimestamp
+      }
       return config
     }, (error) => {
       return Promise.reject(error)
