@@ -4,6 +4,7 @@ import axios from 'axios'
 import qs from 'qs'
 
 const noCache = [
+  '/login/cellphone',
   '/user/detail',
   '/user/follows',
   '/user/followeds',

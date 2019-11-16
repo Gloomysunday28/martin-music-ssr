@@ -87,11 +87,18 @@ export default {
     }
   },
   computed: {
+    state() {
+      return this.$store.state.data
+    },
     recommends() {
-      return this.$store.state.data.recommends.result || []
+      const recommends = this.hasExitst('recommends')
+
+      return recommends ? recommends.result : []
     },
     banner() {
-      return this.$store.state.data.banner.banners || []
+      const banner = this.hasExitst('banner')
+      
+      return banner ? banner.banners : []
     }
   },
   beforeMount() {
@@ -99,6 +106,11 @@ export default {
       const { swiper, swiperSlide } = require('vue-awesome-swiper')
       this.$options.components.swiper = swiper
       this.$options.components.swiperSlide = swiperSlide
+    }
+  },
+  mounted() {
+    if (!this.state.banner) {
+      this.getAllData()
     }
   },
   activated() {
@@ -113,13 +125,22 @@ export default {
     window.sessionStorage.setItem('scrollTop', scrollTop)
   },
   methods: {
+    hasExitst(param) {
+      return this.state[param]
+    },
     getAllData() {
       Promise.all([
         this.getRecommend(),
         this.getBanner()
       ]).then(({0: recommend, 1: banner}) => {
-        this.banner = banner.data.banners
-        this.recommends = recommend.data.result
+        this.$store.commit('setItem', {
+          res: banner,
+          param: 'banner'
+        })
+        this.$store.commit('setItem', {
+          res: recommend,
+          param: 'recommends'
+        })
       })
     },
     getRecommend() {

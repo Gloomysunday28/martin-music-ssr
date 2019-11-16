@@ -28,13 +28,10 @@ export function createStore () {
     },
     actions: {
       fetchData ({ commit }, { fetch }) {
-        // console.log('martin', fetch)/* 2019年11月15日 17时19分12秒 */
         // `store.dispatch()` 会返回 Promise，
         // 以便我们能够知道数据在何时更新
-        // console.log('martin', Axios.get)/* 2019年11月15日 17时25分47秒 */
         return Promise.all(fetch.map(v => {
           return Axios.get(v.api).then(res => {
-            // console.log('res', res)/* 2019年11月15日 17时27分21秒 */
             commit('setItem', { res, param: v.param })
           }).catch(err => {
             console.log('err', err)/* 2019年11月15日 17时28分51秒 */
@@ -44,8 +41,6 @@ export function createStore () {
     },
     mutations: {
       setItem (state, { res, param }) {
-        // console.log('res', res.data)/* 2019年11月15日 17时12分47秒 */
-        // console.log('param', param)/* 2019年11月15日 17时12分47秒 */
         state.data[param] = res.data
       }
     }
