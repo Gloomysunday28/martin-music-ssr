@@ -5,12 +5,12 @@
         <i class="iconfont">&#xe621;</i>
       </router-link>
       <div class="swiper-container">
-        <!-- <swiper class="swiper-wrapper" :options="swiperOption">
+        <swiper class="swiper-wrapper" :options="swiperOption">
           <swiper-slide class="swiper-slide" v-for="ban in banner" :key="ban.imageUrl">
             <img class="swpier-img" :src="ban.imageUrl"/>
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
-        </swiper > -->
+        </swiper >
       </div>
       <!-- 推荐菜单 -->
       <div class="c-music__menu" v-if="banner.length">
@@ -34,6 +34,9 @@
             <img class="c-menu__img" v-lazy="banner[2].imageUrl" alt="">
           </div>
         </div>
+      </div>
+      <div v-else>
+        <div class="c-skull__elecron"></div>
       </div>
       <!-- 推荐歌单 -->
       <div class="c-music__recommend">
@@ -59,25 +62,24 @@
 <script>
 import { api } from '@/api/api'
 import {mapState} from 'vuex'
-if (typeof window !== 'undefined') {
-  const { swiper, swiperSlide } = require('vue-awesome-swiper')
-}
 
 export default {
   name: 'MusicHome',
   asyncData({store}) {
     return store.dispatch('fetchData', 
     {
-      fetch: {
+      fetch: [{
         api: api.recommendSong,
-        param: 'song'
-      },
+        param: 'recommends'
+      }, {
+        api: api.getBanner,
+        param: 'banner'
+      }],
     })
   },
   data(vm) {
     return {
       tag: false,
-      banner: [],
       swiperOption: {
         autoplay: true,
         loop: true,
@@ -85,20 +87,22 @@ export default {
           el: '.swiper-pagination',
         },
       },
-      recommends: []
     }
   },
-  computed: mapState({
-    personal: state => state.baseInfo.personal
-  }),
-  beforeMount() {
-    this.$createElement(swiper, swiper)
-    this.$createElement(swiperSlide, swiperSlide)
+  computed: {
+    recommends() {
+      return this.$store.state.data.recommends.result || []
+    },
+    banner() {
+      return this.$store.state.data.banner.banners || []
+    }
   },
-  mounted() {
-    this.recommends = this.$store.state.data.song.result
-    console.log('martin', this.$store.state)/* 2019年11月15日 17时05分35秒 */
-    // this.getAllData()
+  beforeMount() {
+    if (typeof window !== 'undefined') {
+      const { swiper, swiperSlide } = require('vue-awesome-swiper')
+      this.$options.components.swiper = swiper
+      this.$options.components.swiperSlide = swiperSlide
+    }
   },
   activated() {
     if (window.sessionStorage.scrollTop) {
@@ -223,6 +227,25 @@ export default {
     .c-recommend__label {
       color: #444;
       font-size: 40px;
+    }
+  }
+  .c-skull__elecron {
+    height: 250px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background: -webkit-gradient(linear, left top, right top, color-stop(25%, #f2f2f2), color-stop(37%, #e6e6e6), color-stop(63%, #f2f2f2));
+    background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 37%, #f2f2f2 63%);
+    background-size: 400% 100%;
+    animation: martin-loading 1.4s ease infinite;
+  }
+
+  @keyframes martin-loading {
+    0% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0 50%
     }
   }
 </style>

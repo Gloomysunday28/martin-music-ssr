@@ -1,10 +1,9 @@
 import Vue from 'vue'
-import Router from '@/router'
+import { createRouter } from '@/router/createRouter'
 import axios from 'axios'
 import qs from 'qs'
 
 const noCache = [
-  '/login/cellphone',
   '/user/detail',
   '/user/follows',
   '/user/followeds',
@@ -14,13 +13,15 @@ const noCache = [
   '/user/update',
 ]
 
-// const box = new Vue()
+const box = new Vue()
+
+const Router = createRouter()
 
 const Axios = axios.create({
   // baseURL: 'http://127.0.0.1:3000',
   baseURL: 'http://111.231.55.237:3000',
   timeout: 10000,
-  // withCredentials: true,
+  withCredentials: true,
   // transformRequest(data) {
   //   return qs.stringify(data)
   // }
@@ -29,68 +30,70 @@ const Axios = axios.create({
   }
 })
 
-Axios.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    // box.$loading(true)
-  }
-  if (noCache.includes(config.url)) {
-    config.url += (config.url.includes('?') ? '&' : '?') + `timestamp=${+new Date()}` // 网易云音乐api为了避免高频ip请求错误,设置了2分钟的时间不去请求网易云服务器, 如果设置不缓存的话那么设置teimestamp
-  }
-  return config
-}, (error) => {
-  return Promise.reject(error)
-})
-
-Axios.interceptors.response.use((response) => {
-  // Do something with response data
-  if (typeof window !== 'undefined') {
-    // box.$loading(false)
-  }
-  if (response) {
-    switch (true) {
-      case response.data.code !== 200:
-        if (typeof window !== 'undefined') {
-          // box.$toast(response.data.msg || '请求失败')
-        }
-        return response
-      default:
-        break
-    }
-  }
-
-  return response
-}, (error) => {
-  if (typeof window !== 'undefined') {
-    // box.$loading(false)
-  }
-  // if (error.code === 'ECONNABORTED' && typeof window !== 'undefined') return void box.$toast('网络请求超时', {styles: {backgroud: '#fff'}})
-  if (error.response && typeof window !== 'undefined') {
-    switch (error.response.status) {
-      case 400:
-      case 401:
-      case 408:
-      case 500:
-      case 505:
-        // box.$toast(error.response.data.msg || '请求失败', {styles: {backgroud: '#fff'}})
-        return error.response
-      case 502:
-        // box.$toast('网络请求超时', {styles: {backgroud: '#fff'}})
-        return error.response
-      case 301:
-        Router.push({name: 'MusicLogin'})
-        break
-      default:
-        break
-    }
-  }
-  // Do something with response error
-  return Promise.reject(error)
-})
-
 export { Axios }
 
 export default {
-  install(Vue) {
+  install(Vue, Router) {
+    Axios.interceptors.request.use((config) => {
+      if (typeof window !== 'undefined') {
+        // box.$loading(true)
+      }
+      // if (noCache.includes(config.url)) {
+      //   config.url += (config.url.includes('?') ? '&' : '?') + `timestamp=${+new Date()}` // 网易云音乐api为了避免高频ip请求错误,设置了2分钟的时间不去请求网易云服务器, 如果设置不缓存的话那么设置teimestamp
+      // }
+      return config
+    }, (error) => {
+      return Promise.reject(error)
+    })
+    
+    Axios.interceptors.response.use((response) => {
+      // Do something with response data
+      if (typeof window !== 'undefined') {
+        // box.$loading(false)
+      }
+      if (response) {
+        switch (true) {
+          case response.data.code !== 200:
+            if (typeof window !== 'undefined') {
+              // box.$toast(response.data.msg || '请求失败')
+            }
+            return response
+          default:
+            break
+        }
+      }
+    
+      return response
+    }, (error) => {
+      if (typeof window !== 'undefined') {
+        // box.$loading(false)
+      }
+      
+      // if (error.code === 'ECONNABORTED' && typeof window !== 'undefined') return void box.$toast('网络请求超时', {styles: {backgroud: '#fff'}})
+      if (error.response && typeof window !== 'undefined') {
+        switch (error.response.status) {
+          case 400:
+            console.log('400', Router);
+            return Router.push({name: 'MusicLogin'})
+          case 401:
+          case 408:
+          case 500:
+          case 505:
+            // box.$toast(error.response.data.msg || '请求失败', {styles: {backgroud: '#fff'}})
+            return error.response
+          case 502:
+            // box.$toast('网络请求超时', {styles: {backgroud: '#fff'}})
+            return error.response
+          case 301:
+            break
+          default:
+            break
+        }
+      }
+      // Do something with response error
+      return Promise.reject(error)
+    })
+
     Vue.prototype.$http = Axios
   }
 }

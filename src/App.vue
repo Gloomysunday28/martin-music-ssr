@@ -1,5 +1,5 @@
 <template>
-  <div id="app" ref="contain">
+  <div id="martin-music" ref="contain">
     <transition name="opacity">
       <span :class="['header-back', {'header-back--board': YGBOARD}]" @click="back" v-if="!isIndex">
         <i class="iconfont back-icon">&#xe61b;</i>
@@ -210,7 +210,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-#app {
+#martin-music {
   font-family: -apple-system,BlinkMacSystemFont,PingFang SC,Helvetica Neue,STHeiti,Microsoft Yahei,Tahoma,Simsun,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

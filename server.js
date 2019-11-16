@@ -14,12 +14,12 @@ server.use(express.static(path.resolve(__dirname, './dist')))
 
 server.get('*', (req, res) => {
   const context = {
-    title: 'hello',
     url: req.url
   }
   
   renderer.renderToString(context, (err, html) => {
-    console.log('err', err)/* 2019年11月12日 10时52分10秒 */
+    console.log(err);
+    
     if (err) {
       res.status(500).end('Internal Server Error')
       return
@@ -30,4 +30,4 @@ server.get('*', (req, res) => {
   })
 })
 
-server.listen(8082)
+server.listen(8080)

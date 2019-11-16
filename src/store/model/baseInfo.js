@@ -1,6 +1,6 @@
 export default {
   state: {
-    personal: window.localStorage.personal ? JSON.parse(window.localStorage.personal) : {},
+    personal: {}
   },
   mutations: {
     getPersonal(state, payload) {

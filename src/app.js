@@ -34,7 +34,6 @@ components.forEach(comp => {
 // Vue.use(Loading)
 Vue.use(Dialog)
 Vue.use(Bus)
-Vue.use(HTTP)
 Vue.use(Api)
 Vue.use(log)
 
@@ -77,6 +76,7 @@ if (typeof window !== 'undefined') {
 export function createApp() {
   const router = createRouter()
   const store = createStore()
+  Vue.use(HTTP, router)
 
   sync(store, router)
 

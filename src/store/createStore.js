@@ -1,6 +1,7 @@
 // store.js
 import Vue from 'vue'
 import Vuex from 'vuex'
+import baseInfo from './model/baseInfo'
 import { Axios } from '@/api/http'
 
 Vue.use(Vuex)
@@ -19,6 +20,9 @@ const fetchBar = function() {
 
 export function createStore () {
   return new Vuex.Store({
+    modules: {
+      baseInfo
+    },
     state: {
       data: {}
     },
@@ -28,12 +32,14 @@ export function createStore () {
         // `store.dispatch()` 会返回 Promise，
         // 以便我们能够知道数据在何时更新
         // console.log('martin', Axios.get)/* 2019年11月15日 17时25分47秒 */
-        return Axios.get(fetch.api).then(res => {
-          // console.log('res', res)/* 2019年11月15日 17时27分21秒 */
-          commit('setItem', { res, param: fetch.param })
-        }).catch(err => {
-          console.log('err', err)/* 2019年11月15日 17时28分51秒 */
-        })
+        return Promise.all(fetch.map(v => {
+          return Axios.get(v.api).then(res => {
+            // console.log('res', res)/* 2019年11月15日 17时27分21秒 */
+            commit('setItem', { res, param: v.param })
+          }).catch(err => {
+            console.log('err', err)/* 2019年11月15日 17时28分51秒 */
+          })
+        }))
       },
     },
     mutations: {

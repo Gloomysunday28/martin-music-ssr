@@ -62,7 +62,8 @@ export default {
       recommends: [],
       height: 0,
       headerHeight: 9,
-      clientHeight: 0
+      clientHeight: 0,
+      personal: {}
     }
   },
   mounted() {
@@ -71,7 +72,7 @@ export default {
     this.$refs.mask.style.top = this.clientHeight + 'px'
     this.$refs.songs.style.top = this.clientHeight + 'px'
     this.headerHeight = this.$refs.header.offsetHeight
-    console.log(this.headerHeight)
+    
     this.bs = new BetterScroll('.c-recommend__songs', {
       probeType: 3
     })
